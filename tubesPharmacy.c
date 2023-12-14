@@ -14,6 +14,8 @@ int dataObatBaru();
 int lihatObat();
 int seluruhObat();
 int tipeObat();
+int cariObat();
+// int urutanObat();
 void MenuLoginSignupPembeli();
 int loginpembeli();
 void signupPembeli();
@@ -106,6 +108,7 @@ void MenuAdmin(){
         if(lihatObat()){ 
             seluruhObat();
         }
+        break;
     case 4 :
         system("exit");
     
@@ -113,27 +116,58 @@ void MenuAdmin(){
         break;
     }
 }
-
 int dataObatBaru(){
-    int banyak;
-    dataObat = fopen("Daftar_Obat.dat", "ab+");
+    int tipeO;
     printf("\n=======================================================\n");
-    printf("Banyaknya data obat : ");
-    scanf("%d", &banyak);
-    getchar();
-    for ( i = 0; i < banyak; i++)
+    printf("Silahkan pilih tipe obat\n");
+    printf("1. Antiseptik\n");
+    printf("2. Vitamin\n");
+    printf("3. Diare\n");
+    printf("4. Demam\n");
+    printf("5. Pereda Nyeri\n");
+    printf("6. Flu Batuk\n");
+    printf("7. Kembali ke menu Admin\n");
+    printf("Pilihan : ");
+    scanf("%d", &tipeO);
+    switch (tipeO)
     {
-        fflush(stdin);
-        printf("\nNama Obat : ");
-        gets(data.nama);
-        printf("Tipe Obat : ");
-        gets(data.tipe);
-        printf("Harga Obat : ");
-        scanf("%lf", &data.harga);
-        fwrite(&data, sizeof(data), 1, dataObat);
+    case 1 :
+        strcpy(data.tipe, "Antiseptik");
+        break;
+    case 2 : 
+        strcpy(data.tipe, "Vitamin");
+        break;
+    case 3 : 
+        strcpy(data.tipe, "Diare");
+        break;
+    case 4 :
+        strcpy(data.tipe, "Demam");
+        break;
+    case 5 : 
+       strcpy(data.tipe, "Pereda Nyeri");
+        break;
+    case 6 :
+        strcpy(data.tipe, "Flu Batuk");
+        break;
+    case 7 :
+        MenuAdmin();
+    default:
+        break;
     }
+
+    printf("Masukkan nama obat: ");
+    scanf("%s", data.nama);
+    printf("Masukkan harga obat: ");
+    scanf("%lf", &data.harga);
+
+    dataObat = fopen("Daftar_Obat.dat", "ab");
+    if(dataObat == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+
+    fwrite(&data, sizeof(data), 1, dataObat);
+
     fclose(dataObat);
-    system("pause");
 
     MenuAdmin();
 }
@@ -157,6 +191,12 @@ int lihatObat(){
         break;
     case 2 :
         tipeObat();
+    case 3 : 
+        cariObat();
+        break;
+    case 4 : 
+        urutanObat();
+        break;
     case 5 : 
         MenuAdmin();
     case 6 : 
@@ -181,16 +221,77 @@ int seluruhObat(){
 }
 
 int tipeObat(){
+    int i;
+    char cariTipe[20];
+    printf("Tipe Obat yang ingin dicari : ");
+    scanf("%s", &cariTipe);
     dataObat = fopen("Daftar_Obat.dat", "rb");
-    while (fread(&data, sizeof(data), 1, dataObat)==1)
+    i = 1;
+    while (fread(&data, sizeof(data),1,dataObat)==1)
     {
-        printf("Tipe Obat : %s\n", data.tipe);
+        if(strcmp(data.tipe, cariTipe)==0){
+            printf("Nama obat: %s\nHarga obat: %0.f\n", data.nama, data.harga);
+        }
     }
+    
     fclose(dataObat);
     system("pause");
 
     lihatObat();
 }
+int cariObat(){
+    char namaObat[20];
+    printf("Nama obat yang ingin dicari : ");
+    scanf("%s", namaObat);
+
+    dataObat = fopen("Daftar_Obat.dat", "rb");
+
+    while (fread(&data, sizeof(data),1, dataObat))
+    {
+        if(strcmp(data.nama, namaObat)==0){
+            printf("Nama obat: %s\nHarga obat: %0.f\n", data.nama, data.harga);
+            break;
+        }
+    }
+    fclose(dataObat);
+    system("pause");
+
+    lihatObat();
+    
+}
+// int urutanObat(){
+//     int i = 0;
+//     struct stObat tempObat[50];
+//     dataObat = fopen("Daftar_obat", "rb");
+//     while (fread(&tempObat[i], sizeof(struct stObat),1, dataObat))
+//     {
+//         i++;
+//     }
+//     fclose(dataObat);
+//     bubbleshortObat(tempObat, i);
+
+//     dataObat = fopen("Daftar_obat", "wb");
+//     for(int x = 0; x < i; x++) {
+//         fwrite(&tempObat[x], sizeof(struct stObat),1, dataObat);
+//     }
+
+//     fclose(dataObat);
+//     system("pause");
+
+//     lihatObat();
+// }
+
+// void bubbleshortObat(struct stObat arr[], int n){
+//     for (int i = 0; i < n-1; i++){
+//         for(int j = 0; j < n-i-1; ++j){
+//             if(strcmp(arr[j].nama, arr[j+1].nama) > 0){
+//                 struct stObat tempObat = arr[j];
+//                 arr[j]=arr[j+1];
+//                 arr[j+1]=tempObat;
+//             }
+//         }
+//     }
+// }
 
 //area pembeli====================//
 // log in masih belum kelar.
