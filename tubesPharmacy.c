@@ -13,8 +13,13 @@ void MenuAdmin();
 int dataObatBaru();
 int lihatObat();
 int seluruhObat();
+void MenuLoginSignupPembeli();
 int loginpembeli();
 void menupembeli();
+void TopUp();
+void CekSaldo();
+void CartPembeli();
+
 
 FILE *dataObat;
 
@@ -171,9 +176,12 @@ int seluruhObat(){
     lihatObat();
 }
 
-int loginpembeli(){
+/*int loginpembeli(){
     int repeat;
     char username[20], pass[20];
+    FILE *LoginPembeli;
+    LoginPembeli = fopen("LoginPembeli.dat", "rb+");
+    fprintf(LoginPembeli, "%s, %s\n", username, pass);
     for(repeat = 3; repeat > 0; repeat--){ 
         printf("\n==== Log In ====\n");
         fflush(stdin);
@@ -181,7 +189,7 @@ int loginpembeli(){
         gets(username);
         printf("Password : ");
         gets(pass);
-        if (strcmp(username,"pembeli")==0 && strcmp(pass,"pembeli")==0){
+        if (strcmp(username,"")==0 && strcmp(pass,"pembeli")==0){
             printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n"); 
             return 1;
         }
@@ -193,10 +201,10 @@ int loginpembeli(){
             else{
                 printf("Anda sudah tidak dapat login kembali\n");
             }
-        }
+        } fclose(LoginPembeli);
     }
     return 0;
-}
+}*/
 
 void menupembeli(){
     int menupembeli;
@@ -230,4 +238,71 @@ void menupembeli(){
     default:
         break;
     }
+}
+
+void MenuLoginSignupPembeli(){
+    int menu;
+
+    printf("===Pilih Menu===\n");
+    printf("1. Log in\n");
+    printf("2. Sign Up\n");
+    scanf("%d", &menu);
+
+    switch (menu)
+    {
+    case 1:
+        int loginpembeli();
+        break;
+    
+    case 2:
+        int loginpembeli();
+        break;
+
+    default:
+
+        break;
+    }
+
+
+}
+
+/*void TopUp(){
+    FILE *TopUpSaldo;
+    struct TSaldo
+    {
+        float saldo;
+        int n;
+    }TopUp;
+    
+    TopUpSaldo = fopen("TopSaldo.dat", "ab");
+    printf("Berapa yang mau anda TopUp kan\t:");
+    scanf("%f", &TopUp.saldo);\
+    fwrite(&TopUp, sizeof(TopUp), 1, TopUpSaldo) == 1;
+    printf("Saldo Anda Sekarang =\t%.0f", TopUp.saldo);
+    fclose(TopUpSaldo);
+}
+
+void CekSaldo(){
+    FILE *TopUpSaldo;
+    struct TSaldo
+    {
+        float saldo;
+        int n;
+    }TopUp;
+    
+    TopUpSaldo = fopen("TopSaldo.dat", "rb");
+    fwrite(&TopUp, sizeof(TopUp), 1, TopUpSaldo) == 1;
+    printf("Saldo Anda Sekarang =\t%.0f", TopUp.saldo);
+    fclose(TopUpSaldo);    
+}*/
+
+void CartPembeli(){
+    FILE *shoppingcart;
+    struct{ char NamaObat[100];
+        float HargaObat2,HargaObat1, TotalHargaObat;
+        float Produk;
+    }cart;
+
+    shoppingcart = fopen("cart.dat","ab");
+    dataObat = fopen("Daftar_Obat.dat", "ab+");
 }
