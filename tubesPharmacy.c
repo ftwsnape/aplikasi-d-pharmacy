@@ -282,20 +282,33 @@ void MenuLoginSignupPembeli(){
 
 }
 
-/*void TopUp(){
+void TopUp(){
+
     FILE *TopUpSaldo;
     struct TSaldo
     {
-        float saldo;
-        int n;
+        float saldo1, saldo2, hasil, n;
     }TopUp;
-    
+
+    int i;
+
     TopUpSaldo = fopen("TopSaldo.dat", "ab");
-    printf("Berapa yang mau anda TopUp kan\t:");
-    scanf("%f", &TopUp.saldo);\
-    fwrite(&TopUp, sizeof(TopUp), 1, TopUpSaldo) == 1;
-    printf("Saldo Anda Sekarang =\t%.0f", TopUp.saldo);
+    printf("Mau TopUp berapa kali?\t: ");
+    scanf("%f", &TopUp.n);
+    getchar();
+    for (i=1; i<=TopUp.n; i++){
+        
+        printf("Saldo Awal : "); 
+        scanf("%f", &TopUp.saldo1);
+        printf("Saldo yang ditambahkan : "); 
+        scanf("%f", &TopUp.saldo2);
+        getchar();
+        TopUp.hasil = TopUp.saldo1 + TopUp.saldo2;
+        fwrite(&TopUp, sizeof (TopUp), 1, TopUpSaldo);
+        printf("Saldo Anda Sekarang =\t%.0f\n", TopUp.hasil);
+    }
     fclose(TopUpSaldo);
+
 }
 
 void CekSaldo(){
