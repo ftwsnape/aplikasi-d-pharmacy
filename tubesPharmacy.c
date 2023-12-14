@@ -195,7 +195,7 @@ int lihatObat(){
         cariObat();
         break;
     case 4 : 
-        urutanObat();
+        // urutanObat();
         break;
     case 5 : 
         MenuAdmin();
