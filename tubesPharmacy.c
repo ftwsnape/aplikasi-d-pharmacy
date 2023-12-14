@@ -13,6 +13,7 @@ void MenuAdmin();
 int dataObatBaru();
 int lihatObat();
 int seluruhObat();
+int tipeObat();
 void MenuLoginSignupPembeli();
 int loginpembeli();
 void menupembeli();
@@ -153,6 +154,8 @@ int lihatObat(){
     case 1 :
         seluruhObat();
         break;
+    case 2 :
+        tipeObat();
     case 5 : 
         MenuAdmin();
     case 6 : 
@@ -169,6 +172,18 @@ int seluruhObat(){
         printf("\nNama Obat : %s\n", data.nama);
         printf("Tipe Obat : %s\n", data.tipe);
         printf("Harga Obat : %.0f\n", data.harga);
+    }
+    fclose(dataObat);
+    system("pause");
+
+    lihatObat();
+}
+
+int tipeObat(){
+    dataObat = fopen("Daftar_Obat.dat", "rb");
+    while (fread(&data, sizeof(data), 1, dataObat)==1)
+    {
+        printf("Tipe Obat : %s\n", data.tipe);
     }
     fclose(dataObat);
     system("pause");
