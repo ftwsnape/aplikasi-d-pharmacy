@@ -16,6 +16,7 @@ int seluruhObat();
 int tipeObat();
 void MenuLoginSignupPembeli();
 int loginpembeli();
+void signupPembeli();
 void menupembeli();
 void TopUp();
 void CekSaldo();
@@ -191,36 +192,87 @@ int tipeObat(){
     lihatObat();
 }
 
-//pembeli area====================//
-/*int loginpembeli(){
+//area pembeli====================//
+// log in masih belum kelar.
+int loginpembeli(){
     int repeat;
     char username[20], pass[20];
     FILE *LoginPembeli;
-    LoginPembeli = fopen("LoginPembeli.dat", "rb+");
-    fprintf(LoginPembeli, "%s, %s\n", username, pass);
-    for(repeat = 3; repeat > 0; repeat--){ 
+
+    LoginPembeli = fopen("LogSignPembeli.dat", "rb");
+
+    if (LoginPembeli == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    for (repeat = 3; repeat > 0; repeat--) {
         printf("\n==== Log In ====\n");
         fflush(stdin);
-        printf("username : ");
+
+        printf("Username : ");
+        scanf("%s", username);
+        printf("Password : ");
+        scanf("%s", pass);
+
+        fseek(LoginPembeli, 0, SEEK_SET);
+        while (fscanf(LoginPembeli, "%19s %19s", username, pass) == 2) {
+            if (strcmp(username, "") == 0 && strcmp(pass, "pembeli") == 0) {
+                printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n");
+                fclose(LoginPembeli);
+                return;
+            }
+        }
+
+        printf("Username atau Password salah\n");
+
+        if (repeat > 1) {
+            printf("Tersisa %d kesempatan lagi\n\n", repeat - 1);
+        } else {
+            printf("Anda sudah tidak dapat login kembali\n");
+        }
+    }
+
+    fclose(LoginPembeli);
+}
+
+void signupPembeli() {
+    int repeat;
+    char username[20], pass[20];
+
+    FILE *SignUpPembeli;
+    SignUpPembeli = fopen("LogSignPembeli.dat", "ab");
+
+    for (repeat = 3; repeat > 0; repeat--) {
+        printf("\n==== Sign Up ====\n");
+        fflush(stdin);
+
+        printf("Username : ");
         gets(username);
         printf("Password : ");
         gets(pass);
-        if (strcmp(username,"")==0 && strcmp(pass,"pembeli")==0){
-            printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n"); 
-            return 1;
+
+        fprintf(SignUpPembeli, "%s, %s\n", username, pass);
+
+        printf("Sign up successful!\n");
+
+        printf("Apakah anda ingin Log In sekarang? (y/n): ");
+        char opsi[5];
+        scanf("%s", opsi);
+
+        if (strcmp(opsi, "y") == 0) {
+            loginpembeli();
+            fclose(SignUpPembeli);
+            return 0;
+        } else {
+            printf("Silakan log in nanti.\n");
         }
-        else{
-            printf("Username atau Password salah\n");
-            if(repeat > 1){
-                printf("Tersisa %d kesempatan lagi\n\n", repeat-1);
-            }
-            else{
-                printf("Anda sudah tidak dapat login kembali\n");
-            }
-        } fclose(LoginPembeli);
     }
+
+    fclose(SignUpPembeli);
+
     return 0;
-}*/
+}
 
 void menupembeli(){
     int menupembeli;
@@ -262,24 +314,22 @@ void MenuLoginSignupPembeli(){
     printf("===Pilih Menu===\n");
     printf("1. Log in\n");
     printf("2. Sign Up\n");
+    printf("Pilih salah satu\t: ");
     scanf("%d", &menu);
 
-    switch (menu)
-    {
+    switch (menu) {
     case 1:
-        int loginpembeli();
+        login();
         break;
-    
+
     case 2:
-        int loginpembeli();
+        sign();
         break;
 
     default:
-
-        break;
+        printf("Pilihan yang anda pilih tidak ada pada opsi yang kami berikan\n");
+        return 1;
     }
-
-
 }
 
 void TopUp(){
@@ -323,7 +373,7 @@ void CekSaldo(){
     fwrite(&TopUp, sizeof(TopUp), 1, TopUpSaldo) == 1;
     printf("Saldo Anda Sekarang =\t%.0f", TopUp.saldo);
     fclose(TopUpSaldo);    
-}*/
+}
 
 void CartPembeli(){
     FILE *shoppingcart;
