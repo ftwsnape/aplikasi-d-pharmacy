@@ -54,7 +54,7 @@ void main(){
     }
 
 }
-
+//admin area=================//
 int LogInAdmin(){
     int repeat;
     char username[20], pass[20];
@@ -191,6 +191,7 @@ int tipeObat(){
     lihatObat();
 }
 
+//pembeli area====================//
 /*int loginpembeli(){
     int repeat;
     char username[20], pass[20];
