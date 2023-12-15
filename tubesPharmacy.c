@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct 
-{
+struct stObat{
     char nama[100], tipe[100];
     double harga;
 }data;
@@ -15,7 +14,7 @@ int lihatObat();
 int seluruhObat();
 int tipeObat();
 int cariObat();
-// int urutanObat();
+int urutanObat();
 int MenuLoginSignupPembeli();
 void loginpembeli();
 void signupPembeli();
@@ -195,7 +194,7 @@ int lihatObat(){
         cariObat();
         break;
     case 4 : 
-        // urutanObat();
+        urutanObat();
         break;
     case 5 : 
         MenuAdmin();
@@ -213,6 +212,7 @@ int seluruhObat(){
         printf("\nNama Obat : %s\n", data.nama);
         printf("Tipe Obat : %s\n", data.tipe);
         printf("Harga Obat : %.0f\n", data.harga);
+        printf("\n);
     }
     fclose(dataObat);
     system("pause");
@@ -259,39 +259,44 @@ int cariObat(){
     lihatObat();
     
 }
-// int urutanObat(){
-//     int i = 0;
-//     struct stObat tempObat[50];
-//     dataObat = fopen("Daftar_obat", "rb");
-//     while (fread(&tempObat[i], sizeof(struct stObat),1, dataObat))
-//     {
-//         i++;
-//     }
-//     fclose(dataObat);
-//     bubbleshortObat(tempObat, i);
 
-//     dataObat = fopen("Daftar_obat", "wb");
-//     for(int x = 0; x < i; x++) {
-//         fwrite(&tempObat[x], sizeof(struct stObat),1, dataObat);
-//     }
+void bubbleSort(struct stObat arr[], int n) {
+    struct stObat temp;
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (strcmp(arr[j].nama, arr[j+1].nama) > 0) {
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
 
-//     fclose(dataObat);
-//     system("pause");
+int urutanObat(){
+    struct stObat arr[100];
+    int n = 0;
+    dataObat = fopen("Daftar_obat.dat", "rb");
 
-//     lihatObat();
-// }
+    while(fread(&arr[n], sizeof(struct stObat), 1, dataObat)) {
+        n++;
+    }
 
-// void bubbleshortObat(struct stObat arr[], int n){
-//     for (int i = 0; i < n-1; i++){
-//         for(int j = 0; j < n-i-1; ++j){
-//             if(strcmp(arr[j].nama, arr[j+1].nama) > 0){
-//                 struct stObat tempObat = arr[j];
-//                 arr[j]=arr[j+1];
-//                 arr[j+1]=tempObat;
-//             }
-//         }
-//     }
-// }
+    fclose(dataObat);
+
+    bubbleSort(arr, n);
+
+    printf("Daftar obat dalam urutan ascending:\n");
+    for (int i = 0; i < n; i++){
+        printf("Nama : %s\n", arr[i].nama);
+        printf("Tipe : %s\n", arr[i].tipe);
+        printf("Harga : %0.f\n", arr[i].harga);
+        printf("\n");
+    }
+    system("pause");
+    lihatObat();
+        
+}
 
 //area pembeli====================//
 /*Bagian Top Up dan Cek Saldo masih belum sesuai dengan data user
