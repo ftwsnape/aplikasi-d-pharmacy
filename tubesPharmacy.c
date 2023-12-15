@@ -213,7 +213,7 @@ int seluruhObat(){
         printf("\nNama Obat : %s\n", data.nama);
         printf("Tipe Obat : %s\n", data.tipe);
         printf("Harga Obat : %.0f\n", data.harga);
-        printf("\n);
+        printf("\n");
     }
     fclose(dataObat);
     system("pause");
