@@ -320,7 +320,6 @@ int MenuLoginSignupPembeli(){
     return 0;
 }
 
-// log in dan sign up udah kelar, cmn masih harus debug dikit di sign up.
 void loginpembeli() {
     int repeat;
     char username[20], pass[20];
