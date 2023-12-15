@@ -294,7 +294,8 @@ int cariObat(){
 // }
 
 //area pembeli====================//
-
+/*Bagian Top Up dan Cek Saldo masih belum sesuai dengan data user
+tinggal di edit2 dikit lagi kelar*/
 int MenuLoginSignupPembeli(){
     int menu;
 
@@ -311,11 +312,11 @@ int MenuLoginSignupPembeli(){
 
     case 2:
         signupPembeli();
-        break;
+        return 1;
 
     default:
         printf("Pilihan yang anda pilih tidak ada pada opsi yang kami berikan\n");
-        break;;
+        break;
     }
     return 0;
 }
@@ -385,6 +386,7 @@ void signupPembeli() {
 
         printf("Apakah anda ingin Log In sekarang? (y/n): ");
         char opsi[5];
+        gets(opsi);
         scanf("%s", opsi);
 
         if (strcmp(opsi, "y") == 0) {
@@ -400,37 +402,39 @@ void signupPembeli() {
     fclose(SignUpPembeli);
 }
 
-void menupembeli(){
-    int menupembeli;
+void menupembeli() {
+    int menuPembeli;
     printf("\n=== Selamat datang ===\n");
     printf("\n=== Menu Utama ===\n");
-    printf("Silahkan pilih menu : \n");
+    CekSaldo();
+    printf("\nSilahkan pilih menu : \n");
     printf("1. Top up dan cek saldo\n");
     printf("2. Melihat obat.\n");
-    printf("3. keranjang pembeli\n");
+    printf("3. Keranjang pembeli\n");
     printf("4. Keluar\n");
     printf("Menu : ");
-    scanf("%d", &menupembeli);
-   
-    switch (menupembeli)
-    {
-    case 1 : 
-        TopUp();
-        break;
-    case 2 :
-    //melihat obat 
-        if(lihatObat()){
-            seluruhObat();
-        }
-        break;
-    case 3 :
-    //keranjang pembeli
-    case 4 :
-    //keluar
-        system("exit");
-    
-    default:
-        break;
+    scanf("%d", &menuPembeli);
+
+    switch (menuPembeli) {
+        case 1:
+            TopUp();
+            break;
+        case 2:
+            // Melihat obat
+            if (lihatObat()) {
+                seluruhObat();
+            }
+            break;
+        case 3:
+            CartPembeli();
+            break;
+        case 4:
+            // Keluar
+            exit(0);
+            break;
+        default:
+            printf("Pilihan tidak valid.\n");
+            break;
     }
 }
 
@@ -465,17 +469,17 @@ void TopUp(){
 }
 
 void CekSaldo(){
-    FILE *TopUpSaldo;
+    FILE *CekSaldo;
     struct TSaldo
     {
-        float saldo;
+        float saldo1;
         int n;
-    }TopUp;
+    }Cek;
     
-    TopUpSaldo = fopen("TopSaldo.dat", "rb");
-    fwrite(&TopUp, sizeof(TopUp), 1, TopUpSaldo) == 1;
-    printf("Saldo Anda Sekarang =\t%.0f", TopUp.saldo);
-    fclose(TopUpSaldo);    
+    CekSaldo = fopen("TopSaldo.dat", "rb");
+    fread(&Cek, sizeof(Cek), 1, CekSaldo) == 1;
+    printf("Saldo Anda Sekarang = %.0f\n", Cek.saldo1);
+    fclose(CekSaldo);    
 }
 
 void CartPembeli(){
