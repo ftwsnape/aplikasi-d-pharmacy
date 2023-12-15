@@ -16,8 +16,8 @@ int seluruhObat();
 int tipeObat();
 int cariObat();
 // int urutanObat();
-void MenuLoginSignupPembeli();
-int loginpembeli();
+int MenuLoginSignupPembeli();
+void loginpembeli();
 void signupPembeli();
 void menupembeli();
 void TopUp();
@@ -31,7 +31,7 @@ int i = 0;
 
 void main(){
     int pilihan;
-    printf("======= D'Pharmacy ======\n");
+    printf("\n======= D'Pharmacy ======\n");
     printf("Pilih Role : \n");
     printf("1. Admin.\n");
     printf("2. Pembeli.\n");
@@ -47,7 +47,7 @@ void main(){
         }
         break;
         case 2 :
-        if (loginpembeli()){
+        if (MenuLoginSignupPembeli()){
             menupembeli();
         }
         break;
@@ -294,23 +294,43 @@ int cariObat(){
 // }
 
 //area pembeli====================//
-// log in masih belum kelar.
-int loginpembeli(){
+
+int MenuLoginSignupPembeli(){
+    int menu;
+
+    printf("===Pilih Menu===\n");
+    printf("1. Log in\n");
+    printf("2. Sign Up\n");
+    printf("Pilih salah satu : ");
+    scanf("%d", &menu);
+
+    switch (menu) {
+    case 1:
+        loginpembeli();
+        break;
+
+    case 2:
+        signupPembeli();
+        break;
+
+    default:
+        printf("Pilihan yang anda pilih tidak ada pada opsi yang kami berikan\n");
+        break;;
+    }
+    return 0;
+}
+
+// log in dan sign up udah kelar, cmn masih harus debug dikit di sign up.
+void loginpembeli() {
     int repeat;
     char username[20], pass[20];
     FILE *LoginPembeli;
 
     LoginPembeli = fopen("LogSignPembeli.dat", "rb");
 
-    if (LoginPembeli == NULL) {
-        printf("Error opening file!\n");
-        return;
-    }
-
     for (repeat = 3; repeat > 0; repeat--) {
         printf("\n==== Log In ====\n");
         fflush(stdin);
-
         printf("Username : ");
         scanf("%s", username);
         printf("Password : ");
@@ -318,15 +338,15 @@ int loginpembeli(){
 
         fseek(LoginPembeli, 0, SEEK_SET);
         while (fscanf(LoginPembeli, "%19s %19s", username, pass) == 2) {
-            if (strcmp(username, "") == 0 && strcmp(pass, "pembeli") == 0) {
+            if (strcmp(username, username) == 0 && strcmp(pass, pass) == 0) {
                 printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n");
+                menupembeli();
                 fclose(LoginPembeli);
                 return;
             }
         }
 
         printf("Username atau Password salah\n");
-
         if (repeat > 1) {
             printf("Tersisa %d kesempatan lagi\n\n", repeat - 1);
         } else {
@@ -339,6 +359,11 @@ int loginpembeli(){
 
 void signupPembeli() {
     int repeat;
+    struct data
+    {
+        char username[20], pass[20];
+    }datasign;
+    
     char username[20], pass[20];
 
     FILE *SignUpPembeli;
@@ -350,12 +375,14 @@ void signupPembeli() {
 
         printf("Username : ");
         gets(username);
+        getchar();
         printf("Password : ");
         gets(pass);
+        getchar();
 
-        fprintf(SignUpPembeli, "%s, %s\n", username, pass);
+        fwrite(&datasign, sizeof(datasign), 1, SignUpPembeli);
 
-        printf("Sign up successful!\n");
+        printf("Anda sudah melakukan Sign up\n");
 
         printf("Apakah anda ingin Log In sekarang? (y/n): ");
         char opsi[5];
@@ -367,12 +394,11 @@ void signupPembeli() {
             return 0;
         } else {
             printf("Silakan log in nanti.\n");
+            break;
         }
     }
 
     fclose(SignUpPembeli);
-
-    return 0;
 }
 
 void menupembeli(){
@@ -390,7 +416,7 @@ void menupembeli(){
     switch (menupembeli)
     {
     case 1 : 
-        //top up pembeli
+        TopUp();
         break;
     case 2 :
     //melihat obat 
@@ -409,30 +435,7 @@ void menupembeli(){
     }
 }
 
-void MenuLoginSignupPembeli(){
-    int menu;
-
-    printf("===Pilih Menu===\n");
-    printf("1. Log in\n");
-    printf("2. Sign Up\n");
-    printf("Pilih salah satu\t: ");
-    scanf("%d", &menu);
-
-    switch (menu) {
-    case 1:
-        login();
-        break;
-
-    case 2:
-        sign();
-        break;
-
-    default:
-        printf("Pilihan yang anda pilih tidak ada pada opsi yang kami berikan\n");
-        return 1;
-    }
-}
-
+/*Top up dan cek saldo masih belum bener*/
 void TopUp(){
 
     FILE *TopUpSaldo;
