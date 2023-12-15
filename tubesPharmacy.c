@@ -104,9 +104,10 @@ void MenuAdmin(){
         // riwayat();
         break;
     case 3 :
-        if(lihatObat()){ 
-            seluruhObat();
-        }
+        lihatObat();
+        // if(lihatObat()){ 
+        //     seluruhObat();
+        // }
         break;
     case 4 :
         system("exit");
