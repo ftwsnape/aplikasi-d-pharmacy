@@ -289,9 +289,9 @@ int urutanObat(){
 
     printf("Daftar obat dalam urutan ascending:\n");
     for (int i = 0; i < n; i++){
-        printf("Nama : %s\n", arr[i].nama);
-        printf("Tipe : %s\n", arr[i].tipe);
-        printf("Harga : %0.f\n", arr[i].harga);
+        printf("%d.   Nama : %s\n", i,  arr[i].nama);
+        printf("     Tipe : %s\n", arr[i].tipe);
+        printf("     Harga : %0.f\n", arr[i].harga);
         printf("\n");
     }
     system("pause");
