@@ -7,6 +7,11 @@ struct stObat{
     double harga;
 }data;
 
+struct data{
+    char usernameBaru[20], passBaru[20];
+    float SaldoBaru, SaldoHasil, SaldoBaru1;
+}datasign;
+
 int LogInAdmin();
 void MenuAdmin();
 int dataObatBaru();
@@ -333,76 +338,69 @@ void loginpembeli() {
     FILE *LoginPembeli;
 
     LoginPembeli = fopen("LogSignPembeli.dat", "rb");
-
+    
     for (repeat = 3; repeat > 0; repeat--) {
         printf("\n==== Log In ====\n");
         fflush(stdin);
-        printf("Username : ");
-        scanf("%s", username);
-        printf("Password : ");
-        scanf("%s", pass);
-
-        fseek(LoginPembeli, 0, SEEK_SET);
-        while (fscanf(LoginPembeli, "%19s %19s", username, pass) == 2) {
-            if (strcmp(username, username) == 0 && strcmp(pass, pass) == 0) {
-                printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n");
-                menupembeli();
-                fclose(LoginPembeli);
-                return;
-            }
-        }
-
-        printf("Username atau Password salah\n");
-        if (repeat > 1) {
-            printf("Tersisa %d kesempatan lagi\n\n", repeat - 1);
-        } else {
-            printf("Anda sudah tidak dapat login kembali\n");
-        }
-    }
-
-    fclose(LoginPembeli);
-}
-
-void signupPembeli() {
-    int repeat;
-    struct data
-    {
-        char username[20], pass[20];
-    }datasign;
-    
-    char username[20], pass[20];
-
-    FILE *SignUpPembeli;
-    SignUpPembeli = fopen("LogSignPembeli.dat", "ab");
-
-    for (repeat = 3; repeat > 0; repeat--) {
-        printf("\n==== Sign Up ====\n");
-        fflush(stdin);
-
         printf("Username : ");
         gets(username);
         getchar();
         printf("Password : ");
         gets(pass);
         getchar();
-
-        fwrite(&datasign, sizeof(datasign), 1, SignUpPembeli);
-
-        printf("Anda sudah melakukan Sign up\n");
-
-        printf("Apakah anda ingin Log In sekarang? (y/n): ");
-        char opsi[5];
-        gets(opsi);
-        scanf("%s", opsi);
-
-        if (strcmp(opsi, "y") == 0) {
-            loginpembeli();
-            fclose(SignUpPembeli);
-            return 0;
-        } else {
-            printf("Silakan log in nanti.\n");
-            break;
+        while (fread(&datasign, sizeof(datasign), 1, LoginPembeli))
+        {
+            if (strcmp(username, datasign.usernameBaru) == 0 && strcmp(pass, datasign.passBaru) == 0) {
+            printf("Anda berhasil log in, silahkan melanjutkan ke menu utama.\n");
+            menupembeli();
+            fclose(LoginPembeli);
+            }
+        
+    }
+    if (repeat > 1) {
+            printf("Username atau Password salah\n");
+            printf("Tersisa %d kesempatan lagi\n\n", repeat - 1);
+    } else {
+            printf("Anda sudah tidak dapat login kembali\n");
         }
+
+    fclose(LoginPembeli);
+    }
+}
+
+void signupPembeli() {
+    int repeat;
+
+    char opsi[5];
+
+    FILE *SignUpPembeli;
+
+    SignUpPembeli = fopen("LogSignPembeli.dat", "ab");
+
+    printf("\n==== Sign Up ====\n");
+    fflush(stdin);
+
+    printf("Username : ");
+    fflush(stdin);
+    gets(datasign.usernameBaru);
+    printf("Password : ");
+    fflush(stdin);
+    gets(datasign.passBaru);
+
+    datasign.SaldoBaru = 0.0;
+
+    fwrite(&datasign, sizeof(datasign), 1, SignUpPembeli);
+
+    printf("Anda sudah melakukan Sign up\n");
+
+    printf("Apakah anda ingin Log In sekarang? (y/n): ");
+    gets(opsi);
+    scanf("%s", &opsi);
+    
+    if (strcmp(opsi, "y") == 0) {
+        loginpembeli();
+    } else {
+        printf("Silakan log in nanti.\n");
     }
 
     fclose(SignUpPembeli);
@@ -410,6 +408,7 @@ void signupPembeli() {
 
 void menupembeli() {
     int menuPembeli;
+    fflush(stdin);
     printf("\n=== Selamat datang ===\n");
     printf("\n=== Menu Utama ===\n");
     CekSaldo();
@@ -426,16 +425,12 @@ void menupembeli() {
             TopUp();
             break;
         case 2:
-            // Melihat obat
-            if (lihatObat()) {
-                seluruhObat();
-            }
+            lihatObat();
             break;
         case 3:
             CartPembeli();
             break;
         case 4:
-            // Keluar
             exit(0);
             break;
         default:
@@ -448,43 +443,31 @@ void menupembeli() {
 void TopUp(){
 
     FILE *TopUpSaldo;
-    struct TSaldo
-    {
-        float saldo1, saldo2, hasil, n;
-    }TopUp;
 
-    int i;
+    TopUpSaldo = fopen("LogSignPembeli.dat", "ab");
 
-    TopUpSaldo = fopen("TopSaldo.dat", "ab");
-    printf("Mau TopUp berapa kali?\t: ");
-    scanf("%f", &TopUp.n);
+    printf("Mau Top Up berapa banyak? : ");
+    scanf("%.0f", &datasign.SaldoBaru1);
     getchar();
-    for (i=1; i<=TopUp.n; i++){
-        
-        printf("Saldo Awal : "); 
-        scanf("%f", &TopUp.saldo1);
-        printf("Saldo yang ditambahkan : "); 
-        scanf("%f", &TopUp.saldo2);
-        getchar();
-        TopUp.hasil = TopUp.saldo1 + TopUp.saldo2;
-        fwrite(&TopUp, sizeof (TopUp), 1, TopUpSaldo);
-        printf("Saldo Anda Sekarang =\t%.0f\n", TopUp.hasil);
-    }
+
+    datasign.SaldoHasil = datasign.SaldoBaru;
+    datasign.SaldoBaru = datasign.SaldoBaru1;
+    datasign.SaldoBaru1 = datasign.SaldoHasil;
+
+    datasign.SaldoHasil = datasign.SaldoBaru + datasign.SaldoBaru1;
+
+    printf("Saldo anda sekarang : %.0f", datasign.SaldoHasil);
+
     fclose(TopUpSaldo);
 
 }
 
 void CekSaldo(){
     FILE *CekSaldo;
-    struct TSaldo
-    {
-        float saldo1;
-        int n;
-    }Cek;
     
-    CekSaldo = fopen("TopSaldo.dat", "rb");
-    fread(&Cek, sizeof(Cek), 1, CekSaldo) == 1;
-    printf("Saldo Anda Sekarang = %.0f\n", Cek.saldo1);
+    CekSaldo = fopen("LogSignPembeli.dat", "rb");
+    fread(&datasign, sizeof(datasign), 1, CekSaldo) == 1;
+    printf("Saldo Anda Sekarang = %.0f\n", datasign.SaldoBaru);
     fclose(CekSaldo);    
 }
 
