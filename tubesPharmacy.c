@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 struct stObat{
-    char nama[100], tipe[100];
+    char nama[100], tipe[100], username[20];
     double harga;
 }data;
 
@@ -18,10 +18,15 @@ int LogInAdmin();
 void MenuAdmin();
 int dataObatBaru();
 int lihatObat();
+int lihatObatPem();
 int seluruhObat();
+int seluruhObatPem();
 int tipeObat();
+int tipeObatPem();
 int cariObat();
+int cariObatPem();
 int urutanObat();
+int urutanObatPem();
 int riwayat();
 int seluruhRiwayat();
 int riwayatTertentu();
@@ -241,6 +246,22 @@ int seluruhObat(){
     lihatObat();
 }
 
+int seluruhObatPem(){
+    system("cls");
+    dataObat = fopen("Daftar_Obat.dat", "rb");
+    while (fread(&data, sizeof(data), 1, dataObat)==1)
+    {
+        printf("\nNama Obat : %s\n", data.nama);
+        printf("Tipe Obat : %s\n", data.tipe);
+        printf("Harga Obat : %.0f\n", data.harga);
+        printf("\n");
+    }
+    fclose(dataObat);
+    system("pause");
+
+    lihatObatPem();
+}
+
 int tipeObat(){
     system("cls");
 
@@ -263,6 +284,28 @@ int tipeObat(){
     lihatObat();
 }
 
+int tipeObatPem(){
+    system("cls");
+
+    int i;
+    char cariTipe[20];
+    printf("Tipe Obat yang ingin dicari : ");
+    gets(cariTipe);
+    dataObat = fopen("Daftar_Obat.dat", "rb");
+    i = 1;
+    while (fread(&data, sizeof(data),1,dataObat)==1)
+    {
+        if(strcmp(data.tipe, cariTipe)==0){
+            printf("Nama obat: %s\nHarga obat: %0.f\n", data.nama, data.harga);
+        }
+    }
+    
+    fclose(dataObat);
+    system("pause");
+
+    lihatObatPem();
+}
+
 int cariObat(){
     system("cls");
 
@@ -283,6 +326,29 @@ int cariObat(){
     system("pause");
 
     lihatObat();
+    
+}
+
+int cariObatPem(){
+    system("cls");
+
+    char namaObat[20];
+    printf("Nama obat yang ingin dicari : ");
+    scanf("%s", namaObat);
+
+    dataObat = fopen("Daftar_Obat.dat", "rb");
+
+    while (fread(&data, sizeof(data),1, dataObat))
+    {
+        if(strcmp(data.nama, namaObat)==0){
+            printf("Nama obat: %s\nHarga obat: %0.f\n", data.nama, data.harga);
+            break;
+        }
+    }
+    fclose(dataObat);
+    system("pause");
+
+    lihatObatPem();
     
 }
 
@@ -326,6 +392,33 @@ int urutanObat(){
         
 }
 
+int urutanObatPem(){
+    system("cls");
+
+    struct stObat arr[100];
+    int n = 0;
+    dataObat = fopen("Daftar_obat.dat", "rb");
+
+    while(fread(&arr[n], sizeof(struct stObat), 1, dataObat)) {
+        n++;
+    }
+
+    fclose(dataObat);
+
+    bubbleSort(arr, n);
+
+    printf("Daftar obat dalam urutan ascending:\n");
+    for (int i = 0; i < n; i++){
+        printf("%d.   Nama : %s\n", i,  arr[i].nama);
+        printf("     Tipe : %s\n", arr[i].tipe);
+        printf("     Harga : %0.f\n", arr[i].harga);
+        printf("\n");
+    }
+    system("pause");
+    lihatObatPem();
+        
+}
+
 int riwayat(){
     system("cls");
 
@@ -342,7 +435,7 @@ int riwayat(){
     case 1 :
         seluruhRiwayat();
         break;
-    case 2 : 
+    case 2 :
         riwayatTertentu();
         break;
     case 3 : 
@@ -355,10 +448,40 @@ int riwayat(){
 
 int seluruhRiwayat(){
     system("cls");
+    FILE *riwayat;
+    riwayat = fopen("RiwayatPembeli.dat", "rb");
+    while (fread(&data, sizeof(data), 1, riwayat)==1)
+    {
+        printf("\nNama Obat : %s\n", data.nama);
+        printf("Tipe Obat : %s\n", data.tipe);
+        printf("Harga Obat : %.0f\n", data.harga);
+        printf("\n");
+    }
+    fclose(riwayat);
+    system("pause");
+    MenuAdmin();
+    
 }
 
 int riwayatTertentu(){
     system("cls");
+    char users[20];
+    FILE *riwayat;
+    riwayat = fopen("RiwayatPembeli.dat", "rb");
+    printf("Masukkan username yang ingin dicari : ");
+    gets(users);
+    while (fread(&data, sizeof(data), 1, riwayat)==1)
+    { if(strcmp(users,data.username)==0){
+        printf("\nNama Obat : %s\n", data.nama);
+        printf("Tipe Obat : %s\n", data.tipe);
+        printf("Harga Obat : %.0f\n", data.harga);
+        printf("\n");
+    }
+    }
+    fclose(riwayat);
+    system("pause");
+    MenuAdmin();
+    
 }
 
 //area pembeli====================//
@@ -568,15 +691,15 @@ int lihatObatPem(){
     switch (lihat)
     {
     case 1 :
-        seluruhObat();
+        seluruhObatPem();
         break;
     case 2 :
-        tipeObat();
+        tipeObatPem();
     case 3 : 
-        cariObat();
+        cariObatPem();
         break;
     case 4 : 
-        urutanObat();
+        urutanObatPem();
         break;
     case 5 : 
         pemesanan();
@@ -634,12 +757,12 @@ int pemesanan(){
 void CartPembeli(){
     int total;
     char a[2];
-    FILE *shoppingcart, *temp, *TopUpSaldo, *pesan, *riwayat;
+    FILE *shoppingcart, *temp, *TopUpSaldo, *riwayat;
 
     shoppingcart = fopen("Keranjang_Pembeli.dat","rb");
     TopUpSaldo = fopen("LogSignPembeli.dat", "rb");
     temp = fopen("temp.dat", "wb");
-    riwayat = fopen ("RiwayatPembeli.dat", "ab");
+    riwayat = fopen("RiwayatPembeli.dat", "ab+");
     while (fread(&data ,sizeof(data),1,shoppingcart)){
        printf("\nNama Obat : %s\n", data.nama);
         printf("Tipe Obat : %s\n", data.tipe);
@@ -647,7 +770,7 @@ void CartPembeli(){
         total += data.harga;
         printf("\n");
     }
-    printf("Total harga:%d\n", total);
+    printf("Total harga :%d\n", total);
     printf("\nApakah ingin di check out?\n");
     printf("y/n?\n");
     fflush (stdin);
@@ -660,27 +783,28 @@ void CartPembeli(){
                     system ("pause");
                     menupembeli();
                 } else {
-                 datasign.Saldo-=total; 
-                 datasign2 = datasign;  
-                 fwrite(&datasign2, sizeof(datasign2), 1, temp);
-                 while (fread(&data ,sizeof(data),1,shoppingcart)){
-                    fwrite (&data, sizeof(data),1, pesan);
+                    datasign.Saldo-=total;
+                    datasign2 = datasign;
+                    fwrite(&datasign2, sizeof(datasign2), 1, temp);
+                    while (fread(&data ,sizeof(data),1,shoppingcart)==1){
+                        // strcpy(data.username, username);
+                        fwrite(&data, sizeof(data),1,riwayat);
+                        // system("pause");
                  }
                 }
             }
             else {
-                fwrite (&datasign, sizeof (datasign2), 1, temp);
+                fwrite(&datasign, sizeof (datasign2), 1, temp);
             }
         } 
         fclose (TopUpSaldo);
         fclose (temp);
         fclose (shoppingcart);
-        fclose (pesan);
         fclose (riwayat);
         remove ("Keranjang_Pembeli.dat");
         remove ("LogSignPembeli.dat");
         rename ("temp.dat", "LogSignPembeli.dat");
-        printf("notasi barang sudah terpenuhi");
+        printf("notasi barang sudah terpenuhi\n");
         system ("pause");
         menupembeli();
     }
