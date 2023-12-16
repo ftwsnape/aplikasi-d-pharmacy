@@ -344,10 +344,8 @@ void loginpembeli() {
         fflush(stdin);
         printf("Username : ");
         gets(username);
-        getchar();
         printf("Password : ");
         gets(pass);
-        getchar();
         while (fread(&datasign, sizeof(datasign), 1, LoginPembeli))
         {
             if (strcmp(username, datasign.usernameBaru) == 0 && strcmp(pass, datasign.passBaru) == 0) {
@@ -450,11 +448,13 @@ void TopUp(){
     scanf("%.0f", &datasign.SaldoBaru1);
     getchar();
 
-    datasign.SaldoHasil = datasign.SaldoBaru + datasign.SaldoBaru1;
+    datasign.SaldoBaru += datasign.SaldoBaru1;
 
-    printf("Saldo anda sekarang : %.0f", datasign.SaldoHasil);
+    printf("Saldo anda sekarang : %.0f", datasign.SaldoBaru);
 
     fclose(TopUpSaldo);
+
+    menupembeli();
 
 }
 
