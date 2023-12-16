@@ -632,12 +632,54 @@ int pemesanan(){
 }
 
 void CartPembeli(){
-    FILE *shoppingcart;
-    struct{ char NamaObat[100];
-        float HargaObat2,HargaObat1, TotalHargaObat;
-        float Produk;
-    }cart;
+    int total;
+    char a[2];
+    FILE *shoppingcart, *temp, *TopUpSaldo, *riwayat;
 
-    shoppingcart = fopen("cart.dat","ab");
-    dataObat = fopen("Daftar_Obat.dat", "ab+");
+    shoppingcart = fopen("cart.dat","rb");
+    TopUpSaldo = fopen("LogSignPembeli.dat", "rb");
+    temp = fopen("temp.dat", "wb");
+    riwayat = fopen ("riwayat.dat", "rb");
+    while (fread(&data ,sizeof(data),1,shoppingcart)){
+       printf("\nNama Obat : %s\n", data.nama);
+        printf("Tipe Obat : %s\n", data.tipe);
+        printf("Harga Obat : %.0f\n", data.harga);
+        total += data.harga;
+        printf("\n");
+    }
+    printf("Total harga:%d", total);
+    printf("Apakah ingin di check out?\n");
+    printf("y/n?\n");
+    gets (a);
+    if (strcmp(a, "y")== 0){
+        while (fread (&datasign ,sizeof(datasign), 1,TopUpSaldo)){
+            if (strcmp(username, datasign.usernameBaru)== 0){
+                if (total > datasign.Saldo){
+                    printf("Saldo tidak mencukupi");
+                    menupembeli();
+                } else {
+                 datasign.Saldo-=total; 
+                 datasign2 = datasign;  
+                 fwrite(&datasign2, sizeof(datasign2), 1, temp);
+                 while (fread(&data ,sizeof(data),1,shoppingcart)){
+                    fwrite (&data, sizeof(data),1, riwayat);
+                 }
+                }
+            }
+            else {
+                fwrite (&datasign, sizeof (datasign2), 1, temp);
+            }
+        } 
+        fclose (TopUpSaldo);
+        fclose (temp);
+        fclose (shoppingcart);
+        fclose (riwayat);
+        remove ("shoppingcart.dat");
+        remove ("LogSignPembeli.dat");
+        rename ("temp", "LogSignPembeli.dat");
+        printf("notasi barang sudah terpenuhi");
+    }
+    else{
+        menupembeli();
+    }
 }
