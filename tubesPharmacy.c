@@ -444,14 +444,16 @@ void TopUp(){
 
     TopUpSaldo = fopen("LogSignPembeli.dat", "ab");
 
-    printf("Mau Top Up berapa banyak? : ");
-    scanf("%.0f", &datasign.SaldoBaru1);
-    getchar();
+    while (fread(&datasign, sizeof(datasign), 1, TopUpSaldo) == 1)
+    {
+        printf("Mau Top Up berapa banyak? : ");
+        scanf("%.0f", &datasign.SaldoBaru1);
+        getchar();
 
-    datasign.SaldoBaru += datasign.SaldoBaru1;
+        datasign.SaldoBaru += datasign.SaldoBaru1;
 
-    printf("Saldo anda sekarang : %.0f", datasign.SaldoBaru);
-
+        printf("Saldo anda sekarang : %.0f", datasign.SaldoBaru);
+    }
     fclose(TopUpSaldo);
 
     menupembeli();
