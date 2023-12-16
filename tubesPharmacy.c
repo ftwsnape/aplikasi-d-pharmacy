@@ -405,7 +405,7 @@ void signupPembeli() {
     fclose(SignUpPembeli);
 }
 
-void menupembeli() {
+void menupembeli(char username[20]) {
     int menuPembeli;
     fflush(stdin);
     printf("\n=== Selamat datang ===\n");
@@ -421,7 +421,7 @@ void menupembeli() {
 
     switch (menuPembeli) {
         case 1:
-            TopUp();
+            TopUp(username);
             break;
         case 2:
             lihatObat();
@@ -439,25 +439,39 @@ void menupembeli() {
 }
 
 /*Top up dan cek saldo masih belum bener*/
-void TopUp(){
+void TopUp(char username[20]){
 
-    FILE *TopUpSaldo;
+    FILE *TopUpSaldo, *temp;
 
-    TopUpSaldo = fopen("LogSignPembeli.dat", "ab");
+    float i;
+
+    TopUpSaldo = fopen("LogSignPembeli.dat", "rb");
+    temp = fopen("temp.dat", "wb");
+
+    printf("Mau Top Up berapa banyak? : ");
+    scanf("%.0f", &i);
 
     while (fread(&datasign, sizeof(datasign), 1, TopUpSaldo) == 1)
     {
-        printf("Mau Top Up berapa banyak? : ");
-        scanf("%.0f", &datasign.SaldoBaru1);
-        getchar();
-
-        datasign.SaldoBaru += datasign.SaldoBaru1;
-
-        printf("Saldo anda sekarang : %.0f", datasign.SaldoBaru);
+        if (strcmp(username ,datasign.usernameBaru) == 0)
+        {
+            datasign2 = datasign;
+            datasign2 += i;
+            fwrite(&datasign2, sizeof(datasign2), 1, temp);
+        
+            printf("Saldo anda sekarang : %.0f", datasign.SaldoBaru);
+            fclose(TopSaldo);
+        }
+        
     }
     fclose(TopUpSaldo);
+    fclose(temp);
+    remove("LogSignPembeli.dat");
+    rename("temp.dat", "LogSignPembeli.dat");
 
     menupembeli();
+
+}
 
 }
 
