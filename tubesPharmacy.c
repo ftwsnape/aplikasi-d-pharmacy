@@ -22,6 +22,9 @@ int seluruhObat();
 int tipeObat();
 int cariObat();
 int urutanObat();
+int riwayat();
+int seluruhRiwayat();
+int riwayatTertentu();
 int MenuLoginSignupPembeli();
 void loginpembeli();
 void signupPembeli();
@@ -29,13 +32,16 @@ void menupembeli();
 void TopUp();
 void CekSaldo();
 void CartPembeli();
-
+int lihatObatPem();
+int pemesanan();
 
 FILE *dataObat;
 
 int i = 0;
 
 void main(){
+    system("cls");
+
     int pilihan;
     printf("\n======= D'Pharmacy ======\n");
     printf("Pilih Role : \n");
@@ -63,11 +69,15 @@ void main(){
     }
 
 }
+
 //admin area=================//
+
 int LogInAdmin(){
+    system("cls");
+
     int repeat;;
     for(repeat = 3; repeat > 0; repeat--){ 
-        printf("\n==== Log In ====\n");
+        printf("\n==== Log In Admin ====\n");
         fflush(stdin);
         printf("username : ");
         gets(username);
@@ -91,6 +101,8 @@ int LogInAdmin(){
 }
 
 void MenuAdmin(){
+    system("cls");
+
     int menuAdmin;
     printf("\n=== Selamat datang Admin ===\n");
     printf("Silahkan pilih menu : \n");
@@ -107,13 +119,10 @@ void MenuAdmin(){
         dataObatBaru();
         break;
     case 2 : 
-        // riwayat();
+        riwayat();
         break;
     case 3 :
         lihatObat();
-        // if(lihatObat()){ 
-        //     seluruhObat();
-        // }
         break;
     case 4 :
         system("exit");
@@ -123,6 +132,8 @@ void MenuAdmin(){
     }
 }
 int dataObatBaru(){
+    system("cls");
+
     int tipeO;
     printf("\n=======================================================\n");
     printf("Silahkan pilih tipe obat\n");
@@ -179,6 +190,8 @@ int dataObatBaru(){
 }
 
 int lihatObat(){
+    system("cls");
+
     int lihat;
     printf("\n=======================================================\n");
     printf("1. Menampilkan seluruh obat.\n");
@@ -213,6 +226,7 @@ int lihatObat(){
 }
 
 int seluruhObat(){
+    system("cls");
     dataObat = fopen("Daftar_Obat.dat", "rb");
     while (fread(&data, sizeof(data), 1, dataObat)==1)
     {
@@ -228,6 +242,8 @@ int seluruhObat(){
 }
 
 int tipeObat(){
+    system("cls");
+
     int i;
     char cariTipe[20];
     printf("Tipe Obat yang ingin dicari : ");
@@ -248,6 +264,8 @@ int tipeObat(){
 }
 
 int cariObat(){
+    system("cls");
+
     char namaObat[20];
     printf("Nama obat yang ingin dicari : ");
     scanf("%s", namaObat);
@@ -282,6 +300,8 @@ void bubbleSort(struct stObat arr[], int n) {
 }
 
 int urutanObat(){
+    system("cls");
+
     struct stObat arr[100];
     int n = 0;
     dataObat = fopen("Daftar_obat.dat", "rb");
@@ -306,12 +326,48 @@ int urutanObat(){
         
 }
 
-//area pembeli====================//
-/*Bagian Top Up dan Cek Saldo masih belum sesuai dengan data user
-tinggal di edit2 dikit lagi kelar*/
-int MenuLoginSignupPembeli(){
-    int menu;
+int riwayat(){
+    system("cls");
 
+    int rwyt;
+    printf("\n=======================================================\n");
+    printf("1. Seluruh riwayat pembeli.\n");
+    printf("2. Pembeli tertentu.\n");
+    printf("3. Kembali ke menu Admin.\n");
+    printf("Pilihan : ");
+    scanf("%d", &rwyt);
+    
+    switch (rwyt)
+    {
+    case 1 :
+        seluruhRiwayat();
+        break;
+    case 2 : 
+        riwayatTertentu();
+        break;
+    case 3 : 
+        menupembeli();
+        break;
+    default:
+        break;
+    }
+}
+
+int seluruhRiwayat(){
+    system("cls");
+}
+
+int riwayatTertentu(){
+    system("cls");
+}
+
+//area pembeli====================//
+
+int MenuLoginSignupPembeli(){
+    system("cls");
+
+    int menu;
+    printf("\n=======================================================\n");
     printf("===Pilih Menu===\n");
     printf("1. Log in\n");
     printf("2. Sign Up\n");
@@ -335,11 +391,14 @@ int MenuLoginSignupPembeli(){
 }
 
 void loginpembeli() {
+    system("cls");
+
     int repeat;
     FILE *LoginPembeli;
     
     for (repeat = 3; repeat > 0; repeat--) {
         LoginPembeli = fopen("LogSignPembeli.dat", "rb");
+        printf("\n=======================================================\n");
         printf("\n==== Log In ====\n");
         fflush(stdin);
         printf("Username : ");
@@ -367,6 +426,8 @@ void loginpembeli() {
 }
 
 void signupPembeli() {
+    system("cls");
+
     int repeat;
 
     char opsi[5];
@@ -374,7 +435,7 @@ void signupPembeli() {
     FILE *SignUpPembeli;
 
     SignUpPembeli = fopen("LogSignPembeli.dat", "ab");
-
+    printf("\n=======================================================\n");
     printf("\n==== Sign Up ====\n");
     fflush(stdin);
 
@@ -405,14 +466,17 @@ void signupPembeli() {
 }
 
 void menupembeli() {
+    system("cls");
+
     int menuPembeli;
     fflush(stdin);
+    printf("\n=======================================================\n");
     printf("\n=== Selamat datang ===\n");
     printf("\n=== Menu Utama ===\n");
     CekSaldo();
     printf("\nSilahkan pilih menu : \n");
     printf("1. Top up dan cek saldo\n");
-    printf("2. Melihat obat.\n");
+    printf("2. Melihat obat & pesan obat\n");
     printf("3. Keranjang pembeli\n");
     printf("4. Keluar\n");
     printf("Menu : ");
@@ -423,7 +487,7 @@ void menupembeli() {
             TopUp();
             break;
         case 2:
-            lihatObat();
+            lihatObatPem();
             break;
         case 3:
             CartPembeli();
@@ -437,8 +501,8 @@ void menupembeli() {
     }
 }
 
-/*Top up dan cek saldo masih belum bener*/
 void TopUp(){
+    system("cls");
 
     FILE *TopUpSaldo, *temp;
 
@@ -446,7 +510,7 @@ void TopUp(){
 
     TopUpSaldo = fopen("LogSignPembeli.dat", "rb");
     temp = fopen("temp.dat", "wb");
-
+    printf("\n=======================================================\n");
     printf("Mau Top Up berapa banyak? : ");
     scanf("%d", &i);
 
@@ -472,6 +536,8 @@ void TopUp(){
 }
 
 void CekSaldo(){
+    system("cls");
+
     FILE *CekSaldo;
     
     CekSaldo = fopen("LogSignPembeli.dat", "rb");
@@ -482,6 +548,87 @@ void CekSaldo(){
         }
     }
     fclose(CekSaldo);
+}
+
+int lihatObatPem(){
+    system("cls");
+
+    int lihat;
+    printf("\n=======================================================\n");
+    printf("1. Menampilkan seluruh obat.\n");
+    printf("2. Menampilan tipe obat tertentu.\n");
+    printf("3. Mencari obat tertentu.\n");
+    printf("4. List obat terurut (A-Z).\n");
+    printf("5. Pemesanan Obat\n");
+    printf("6. Kembali ke menu pembeli\n");
+    printf("Pilihan : ");
+    scanf("%d", &lihat);
+    getchar();
+
+    switch (lihat)
+    {
+    case 1 :
+        seluruhObat();
+        break;
+    case 2 :
+        tipeObat();
+    case 3 : 
+        cariObat();
+        break;
+    case 4 : 
+        urutanObat();
+        break;
+    case 5 : 
+        pemesanan();
+        break;
+    case 6 : 
+        menupembeli();
+        break;
+    case 7 : 
+        system("exit");
+    default:
+        break;
+    }
+}
+
+int pemesanan(){
+    system("cls");
+    char barang[100], konfirm[10];
+    FILE *pesan;
+    FILE *cart;
+    pesan = fopen("Daftar_Obat.dat","rb");
+    cart = fopen("Keranjang_Pembeli.dat", "ab");
+
+    printf("Pilih obat yang ingin dibeli : ");
+    gets(barang);
+    while (fread(&data, sizeof(data), 1, pesan))
+    {
+        if (strcmp(barang, data.nama)==0)
+        {
+            printf("Nama obat : %s\n", data.nama);
+            printf("Tipe obat: %s\n", data.tipe);
+            printf("Harga Obat : %.0f\n", data.harga);
+        }
+        
+    }
+    printf("Apakah anda yakin memesan obat ini?\n");
+    printf("Ya / Tidak\n");
+    printf("Pilihan : ");
+    gets(konfirm);
+    if (strcmp(konfirm, "Ya")==0)
+    {
+        fwrite(&data, sizeof(data), 1, cart);
+        printf("Obat berhasil ditambahkan.\n");
+        fclose(pesan);
+        fclose(cart);
+        lihatObatPem();
+    } else {
+        fclose(pesan);
+        fclose(cart);
+        lihatObatPem();
+    }
+    
+
 }
 
 void CartPembeli(){
