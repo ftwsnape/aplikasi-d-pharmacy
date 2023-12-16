@@ -450,10 +450,6 @@ void TopUp(){
     scanf("%.0f", &datasign.SaldoBaru1);
     getchar();
 
-    datasign.SaldoHasil = datasign.SaldoBaru;
-    datasign.SaldoBaru = datasign.SaldoBaru1;
-    datasign.SaldoBaru1 = datasign.SaldoHasil;
-
     datasign.SaldoHasil = datasign.SaldoBaru + datasign.SaldoBaru1;
 
     printf("Saldo anda sekarang : %.0f", datasign.SaldoHasil);
