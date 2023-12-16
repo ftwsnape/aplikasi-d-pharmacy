@@ -230,7 +230,7 @@ int tipeObat(){
     int i;
     char cariTipe[20];
     printf("Tipe Obat yang ingin dicari : ");
-    scanf("%s", &cariTipe);
+    gets(cariTipe);
     dataObat = fopen("Daftar_Obat.dat", "rb");
     i = 1;
     while (fread(&data, sizeof(data),1,dataObat)==1)
@@ -245,6 +245,7 @@ int tipeObat(){
 
     lihatObat();
 }
+
 int cariObat(){
     char namaObat[20];
     printf("Nama obat yang ingin dicari : ");
