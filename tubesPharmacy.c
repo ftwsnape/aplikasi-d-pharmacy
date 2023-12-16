@@ -634,12 +634,12 @@ int pemesanan(){
 void CartPembeli(){
     int total;
     char a[2];
-    FILE *shoppingcart, *temp, *TopUpSaldo, *riwayat;
+    FILE *shoppingcart, *temp, *TopUpSaldo, *pesan, *riwayat;
 
-    shoppingcart = fopen("cart.dat","rb");
+    shoppingcart = fopen("Keranjang_Pembeli.dat","rb");
     TopUpSaldo = fopen("LogSignPembeli.dat", "rb");
     temp = fopen("temp.dat", "wb");
-    riwayat = fopen ("riwayat.dat", "rb");
+    riwayat = fopen ("RiwayatPembeli.dat", "ab");
     while (fread(&data ,sizeof(data),1,shoppingcart)){
        printf("\nNama Obat : %s\n", data.nama);
         printf("Tipe Obat : %s\n", data.tipe);
@@ -647,22 +647,24 @@ void CartPembeli(){
         total += data.harga;
         printf("\n");
     }
-    printf("Total harga:%d", total);
-    printf("Apakah ingin di check out?\n");
+    printf("Total harga:%d\n", total);
+    printf("\nApakah ingin di check out?\n");
     printf("y/n?\n");
+    fflush (stdin);
     gets (a);
     if (strcmp(a, "y")== 0){
         while (fread (&datasign ,sizeof(datasign), 1,TopUpSaldo)){
             if (strcmp(username, datasign.usernameBaru)== 0){
                 if (total > datasign.Saldo){
-                    printf("Saldo tidak mencukupi");
+                    printf("Saldo tidak mencukupi\n");
+                    system ("pause");
                     menupembeli();
                 } else {
                  datasign.Saldo-=total; 
                  datasign2 = datasign;  
                  fwrite(&datasign2, sizeof(datasign2), 1, temp);
                  while (fread(&data ,sizeof(data),1,shoppingcart)){
-                    fwrite (&data, sizeof(data),1, riwayat);
+                    fwrite (&data, sizeof(data),1, pesan);
                  }
                 }
             }
@@ -673,11 +675,14 @@ void CartPembeli(){
         fclose (TopUpSaldo);
         fclose (temp);
         fclose (shoppingcart);
+        fclose (pesan);
         fclose (riwayat);
-        remove ("shoppingcart.dat");
+        remove ("Keranjang_Pembeli.dat");
         remove ("LogSignPembeli.dat");
-        rename ("temp", "LogSignPembeli.dat");
+        rename ("temp.dat", "LogSignPembeli.dat");
         printf("notasi barang sudah terpenuhi");
+        system ("pause");
+        menupembeli();
     }
     else{
         menupembeli();
